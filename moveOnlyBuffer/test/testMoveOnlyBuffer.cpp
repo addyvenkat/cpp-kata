@@ -13,4 +13,5 @@ TEST(MoveOnlyBuffer, MoveSemantics) {
   CMoveOnlyBuffer b = std::move(a);
   EXPECT_EQ(b.getVal(), 128);
   EXPECT_EQ(b.getDataPtr(), p);
+  EXPECT_EQ(a.getDataPtr(), nullptr);
 }

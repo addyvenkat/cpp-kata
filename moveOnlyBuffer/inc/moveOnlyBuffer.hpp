@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <memory>
 
+// TODO: Re-attempt with unique_ptr instead of new/delete
+
 class CMoveOnlyBuffer
 {
 private:

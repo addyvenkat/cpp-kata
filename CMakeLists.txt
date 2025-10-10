@@ -23,3 +23,10 @@ FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googlet
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
+# MoveOnlyBuffer build
+add_library(moveOnlyBuffer INTERFACE)
+target_include_directories(moveOnlyBuffer INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/moveOnlyBuffer/inc)
+add_executable(testMoveOnlyBuffer ${CMAKE_CURRENT_SOURCE_DIR}/moveOnlyBuffer/test/testMoveOnlyBuffer.cpp)
+target_link_libraries(testMoveOnlyBuffer PRIVATE moveOnlyBuffer gtest gtest_main)
+add_test(NAME moveOnlyBuffer COMMAND testMoveOnlyBuffer)
+

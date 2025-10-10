@@ -1,3 +1,5 @@
 build*/
 .cache/
 .git/
+.vscode/
+.DS_Store

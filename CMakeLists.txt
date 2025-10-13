@@ -26,6 +26,7 @@ enable_testing()
 # MoveOnlyBuffer build
 add_library(moveOnlyBuffer INTERFACE)
 target_include_directories(moveOnlyBuffer INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/moveOnlyBuffer/inc)
+target_compile_definitions(moveOnlyBuffer INTERFACE USE_UNIQUE_PTR) # Comment this for new/delete implementation
 add_executable(testMoveOnlyBuffer ${CMAKE_CURRENT_SOURCE_DIR}/moveOnlyBuffer/test/testMoveOnlyBuffer.cpp)
 target_link_libraries(testMoveOnlyBuffer PRIVATE moveOnlyBuffer gtest gtest_main)
 add_test(NAME moveOnlyBuffer COMMAND testMoveOnlyBuffer)

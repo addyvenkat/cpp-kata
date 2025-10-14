@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <utility>
 
 #ifdef USE_UNIQUE_PTR
 // Using unique_ptr
@@ -19,13 +20,13 @@ public:
     // Move constructor
     CMoveOnlyBuffer(CMoveOnlyBuffer&& other) noexcept
     {
-        this->_dataPtr = std::move(other._dataPtr);
+        this->_dataPtr = std::exchange(other._dataPtr, nullptr);
     }
 
     // Move assignment - default
     CMoveOnlyBuffer& operator=(CMoveOnlyBuffer&& other) noexcept
     {
-        this->_dataPtr = std::move(other._dataPtr);
+        this->_dataPtr = std::exchange(other._dataPtr, nullptr);
         return *this;
     }
     
@@ -85,5 +86,7 @@ public:
 };
 #endif // USE_UNIQUE_PTR
 
-static_assert(!std::is_copy_constructible_v<CMoveOnlyBuffer>); // Shouldn't be copy constructible
-static_assert(std::is_move_constructible_v<CMoveOnlyBuffer>); // Should be move constructible
+static_assert(!std::is_copy_constructible_v<CMoveOnlyBuffer>);
+static_assert(!std::is_copy_assignable_v<CMoveOnlyBuffer>);
+static_assert(std::is_nothrow_move_constructible_v<CMoveOnlyBuffer>);
+static_assert(std::is_nothrow_move_assignable_v<CMoveOnlyBuffer>);

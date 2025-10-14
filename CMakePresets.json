@@ -8,11 +8,13 @@
   ],
   "buildPresets": [
     {"name":"asan","configurePreset":"dev-asan"},
+    {"name":"ubsan","configurePreset":"dev-ubsan"},
     {"name":"tsan","configurePreset":"dev-tsan"},
     {"name":"release","configurePreset":"release"}
   ],
   "testPresets": [
     {"name":"asan-tests","configurePreset":"dev-asan"},
+    {"name":"ubsan-tests","configurePreset":"dev-ubsan"},
     {"name":"tsan-tests","configurePreset":"dev-tsan"}
   ]
 }

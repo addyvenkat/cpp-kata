@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(repo CXX)
+project(repo C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_options(-O2 -g -fno-omit-frame-pointer -Wall -Wextra -Werror -Wconversion -Wshadow)
@@ -31,3 +31,8 @@ add_executable(testMoveOnlyBuffer ${CMAKE_CURRENT_SOURCE_DIR}/moveOnlyBuffer/tes
 target_link_libraries(testMoveOnlyBuffer PRIVATE moveOnlyBuffer gtest gtest_main)
 add_test(NAME moveOnlyBuffer COMMAND testMoveOnlyBuffer)
 
+# RingBuffer build
+add_library(RingBuffer ${CMAKE_CURRENT_SOURCE_DIR}/ringBuffer/src/RingBuffer.c)
+target_include_directories(RingBuffer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ringBuffer/inc)
+add_executable(testRingBuffer ${CMAKE_CURRENT_SOURCE_DIR}/ringBuffer/src/testRingBuffer.cpp)
+target_link_libraries(testRingBuffer PRIVATE RingBuffer gtest_main)

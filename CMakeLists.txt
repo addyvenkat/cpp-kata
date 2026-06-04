@@ -36,3 +36,9 @@ add_library(RingBuffer ${CMAKE_CURRENT_SOURCE_DIR}/ringBuffer/src/RingBuffer.c)
 target_include_directories(RingBuffer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ringBuffer/inc)
 add_executable(testRingBuffer ${CMAKE_CURRENT_SOURCE_DIR}/ringBuffer/src/testRingBuffer.cpp)
 target_link_libraries(testRingBuffer PRIVATE RingBuffer gtest_main)
+
+# AlignedMalloc build
+add_library(alignedMalloc ${CMAKE_CURRENT_SOURCE_DIR}/alignedMalloc/src/alignedMalloc.c)
+target_include_directories(alignedMalloc PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/alignedMalloc/inc)
+add_executable(testAlignedMalloc ${CMAKE_CURRENT_SOURCE_DIR}/alignedMalloc/src/testAlignedMalloc.cpp)
+target_link_libraries(testAlignedMalloc PRIVATE alignedMalloc gtest_main)

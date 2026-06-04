@@ -2,37 +2,48 @@
 
 #include "alignedMalloc.h"
 
+#define CANARY_VALUE 0xDEADBEEF
+
 void * alignedMalloc(size_t size, size_t alignment) {
     // Validate alignment is a power of 2 and greater than 0
     if (alignment == 0 || (alignment & (alignment - 1)) != 0) {
         return NULL;
     }
     
-    // Calculate total allocation size
-    size_t total_size = size + sizeof(void*) + (alignment - 1);
+    // We need enough room for the metadata block plus alignment padding
+    size_t total_size = size + sizeof(MallocHeader) + (alignment - 1);
     
-    // Standard malloc call
     void * original_ptr = malloc(total_size);
     if (original_ptr == NULL) {
         return NULL;
     }
     
-    // Calculate aligned pointer position
-    void * aligned_ptr = (void*)(((uintptr_t)original_ptr + sizeof(void*) + (alignment - 1)) & ~(alignment - 1));
+    // Calculate aligned pointer position, ensuring room for the Header right before it
+    uintptr_t raw_addr = (uintptr_t)original_ptr + sizeof(MallocHeader);
+    void * aligned_ptr = (void*)((raw_addr + (alignment - 1)) & ~(alignment - 1));
 
-    // Store bookkeeping pointer right before aligned_ptr
-    ((void**)aligned_ptr)[-1] = original_ptr;
+    // Safely write metadata using the structured layout
+    MallocHeader* header = (MallocHeader*)((uint8_t*)aligned_ptr - sizeof(MallocHeader));
+    header->original_ptr = original_ptr;
+    header->canary = CANARY_VALUE;
 
     return aligned_ptr;
 }
 
 void alignedFree(void * aligned_ptr) {
-    if(aligned_ptr == NULL)
+    if (aligned_ptr == NULL)
         return;
 
-    // Fetch the stored pointer
-    void * original_ptr = ((void**)aligned_ptr)[-1];
-    if(original_ptr)
-        free(original_ptr);
-    return;
+    // Safely access metadata via the structure pointer
+    MallocHeader* header = (MallocHeader*)((uint8_t*)aligned_ptr - sizeof(MallocHeader));
+
+    // Security vulnerability check
+    if (header->canary != CANARY_VALUE) {
+        printf("Heap Corrupted!!!\n");
+        return;
+    }
+
+    if (header->original_ptr) {
+        free(header->original_ptr);
+    }
 }

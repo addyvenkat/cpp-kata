@@ -60,3 +60,31 @@ TEST(AlignedMallocTest, FreeHandlesNullPointer) {
     // Should not crash or segment fault
     EXPECT_NO_THROW(alignedFree(nullptr));
 }
+
+// Test 5: Corruption Test with canary value modified should safely no-op without calling free()
+TEST(AlignedMallocTest, HeapCorruption) {
+    
+    size_t size = 1024;
+    size_t alignment = 8;
+
+    void* ptr = alignedMalloc(size, alignment);
+    ASSERT_NE(ptr, nullptr);
+
+    uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
+    EXPECT_EQ(addr & (alignment - 1), 0);
+
+    // Write to the beginning and end of the buffer to ensure boundary validity
+    char* char_ptr = static_cast<char*>(ptr);
+    char_ptr[0] = 'A';
+    char_ptr[size - 1] = 'Z';
+
+    EXPECT_EQ(char_ptr[0], 'A');
+    EXPECT_EQ(char_ptr[size - 1], 'Z');
+
+    // Corrupt heap
+    char_ptr[-1] = 'W';
+    char_ptr[-2] = 'Z';
+    
+    // Should not crash or segment fault
+    EXPECT_NO_THROW(alignedFree(nullptr));
+}

@@ -42,3 +42,9 @@ add_library(alignedMalloc ${CMAKE_CURRENT_SOURCE_DIR}/alignedMalloc/src/alignedM
 target_include_directories(alignedMalloc PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/alignedMalloc/inc)
 add_executable(testAlignedMalloc ${CMAKE_CURRENT_SOURCE_DIR}/alignedMalloc/src/testAlignedMalloc.cpp)
 target_link_libraries(testAlignedMalloc PRIVATE alignedMalloc gtest_main)
+
+# CustomSmartPtr build
+add_library(customSmartPtr INTERFACE)
+target_include_directories(customSmartPtr INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/customSmartPtr/inc)
+add_executable(testCustomSmartPtr ${CMAKE_CURRENT_SOURCE_DIR}/customSmartPtr/src/testCustomSmartPtr.cpp)
+target_link_libraries(testCustomSmartPtr PRIVATE customSmartPtr gtest_main)

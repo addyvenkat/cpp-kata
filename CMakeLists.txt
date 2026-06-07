@@ -48,3 +48,9 @@ add_library(customSmartPtr INTERFACE)
 target_include_directories(customSmartPtr INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/customSmartPtr/inc)
 add_executable(testCustomSmartPtr ${CMAKE_CURRENT_SOURCE_DIR}/customSmartPtr/src/testCustomSmartPtr.cpp)
 target_link_libraries(testCustomSmartPtr PRIVATE customSmartPtr gtest_main)
+
+# RegisterLock build
+add_library(registerLock INTERFACE)
+target_include_directories(registerLock INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/registerLock/inc)
+add_executable(testRegisterLock ${CMAKE_CURRENT_SOURCE_DIR}/registerLock/src/testRegisterLock.cpp)
+target_link_libraries(testRegisterLock PRIVATE registerLock gtest_main)
